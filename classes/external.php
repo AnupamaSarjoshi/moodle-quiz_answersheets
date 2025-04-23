@@ -29,6 +29,11 @@ defined('MOODLE_INTERNAL') || die;
 require_once("$CFG->libdir/externallib.php");
 require_once($CFG->dirroot . '/mod/quiz/locallib.php');
 
+use mod_quiz\quiz_settings;
+
+/**
+ * External API class.
+ */
 class quiz_answersheets_external extends external_api {
 
     /**
@@ -76,7 +81,7 @@ class quiz_answersheets_external extends external_api {
         $context = context_module::instance($cm->id);
         self::validate_context($context);
 
-        $quizobj = quiz::create($params['quizid'], $params['userid']);
+        $quizobj = quiz_settings::create($params['quizid'], $params['userid']);
 
         // Check questions.
         if (!$quizobj->has_questions()) {
@@ -106,7 +111,7 @@ class quiz_answersheets_external extends external_api {
      * Prepare and start a new attempt deleting the previous preview attempts.
      * @todo MDL-66633 When we move to Moodle 3.8, use quiz_prepare_and_start_new_attempt in mod/quiz/locallib.php.
      *
-     * @param quiz $quizobj quiz object
+     * @param quiz_settings $quizobj quiz object
      * @param int $attemptnumber the attempt number
      * @param object $lastattempt last attempt object
      * @param bool $offlineattempt whether is an offline attempt or not
@@ -118,7 +123,7 @@ class quiz_answersheets_external extends external_api {
      * @return object the new attempt
      * @since  Moodle 3.1
      */
-    public static function quiz_prepare_and_start_new_attempt(quiz $quizobj, $attemptnumber, $lastattempt,
+    public static function quiz_prepare_and_start_new_attempt(quiz_settings $quizobj, $attemptnumber, $lastattempt,
             $offlineattempt = false, $forcedrandomquestions = [], $forcedvariants = [], $userid = null) {
         global $DB, $USER;
 
